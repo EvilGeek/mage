@@ -2608,8 +2608,10 @@ public abstract class PlayerImpl implements Player, Serializable {
     }
 
     private void addModeOptions(List<Ability> options, Ability option, Game game) {
+        // TODO: Support modal spells with more than one selectable mode
         for (Mode mode : option.getModes().values()) {
             Ability newOption = option.copy();
+            newOption.getModes().getSelectedModes().clear();
             newOption.getModes().setMode(mode);
             if (newOption.getTargets().getUnchosen().size() > 0) {
                 if (newOption.getManaCosts().getVariableCosts().size() > 0) {
@@ -2918,6 +2920,16 @@ public abstract class PlayerImpl implements Player, Serializable {
                 result = false;
                 for (Card card : cards) {
                     result |= putOntoBattlefieldWithInfo(card, game, fromZone, source == null ? null : source.getSourceId());
+                }
+                return result;
+            case LIBRARY:
+                result = false;
+                boolean withName = true;
+                if (fromZone.equals(Zone.HAND) || fromZone.equals(Zone.LIBRARY)) {
+                    withName = false;
+                }
+                for (Card card : cards) {
+                    result |= moveCardToLibraryWithInfo(card, source == null ? null : source.getSourceId(), game, fromZone, true, withName);
                 }
                 return result;
             default:

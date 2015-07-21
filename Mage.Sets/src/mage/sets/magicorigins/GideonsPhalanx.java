@@ -31,8 +31,9 @@ import java.util.UUID;
 import mage.MageInt;
 import mage.ObjectColor;
 import mage.abilities.condition.common.SpellMasteryCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.decorator.ConditionalOneShotEffect;
 import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.AddContinuousEffectToGame;
 import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
 import mage.abilities.keyword.IndestructibleAbility;
@@ -58,8 +59,8 @@ public class GideonsPhalanx extends CardImpl {
         this.getSpellAbility().addEffect(new CreateTokenEffect(new GideonsPhalanxKnightToken(), 4));
 
         // <i>Spell mastery</i> - If there are two or more instant and/or sorcery cards in your graveyard, creatures you control gain indestructible until end of turn.
-        Effect effect = new ConditionalContinuousEffect(
-                new GainAbilityAllEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn, new FilterControlledCreaturePermanent()),
+        Effect effect = new ConditionalOneShotEffect(
+                new AddContinuousEffectToGame(new GainAbilityAllEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn, new FilterControlledCreaturePermanent())),
                 SpellMasteryCondition.getInstance(),
                 "<br><i>Spell mastery</i> - If there are two or more instant and/or sorcery cards in your graveyard, creatures you control gain indestructible until end of turn");
         this.getSpellAbility().addEffect(effect);
@@ -78,7 +79,7 @@ public class GideonsPhalanx extends CardImpl {
 class GideonsPhalanxKnightToken extends Token {
 
     public GideonsPhalanxKnightToken() {
-        super("Soldier", "2/2 white Knight creature tokens with vigilance");
+        super("Knight", "2/2 white Knight creature tokens with vigilance");
         this.setOriginalExpansionSetCode("ORI");
         cardType.add(CardType.CREATURE);
         color.setColor(ObjectColor.WHITE);

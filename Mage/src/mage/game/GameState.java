@@ -198,6 +198,7 @@ public class GameState implements Serializable, Copyable<GameState> {
 
     public void restore(GameState state) {
         this.activePlayerId = state.activePlayerId;
+        this.playerList.setCurrent(state.activePlayerId);
         this.priorityPlayerId = state.priorityPlayerId;
         this.stack = state.stack;
         this.command = state.command;
@@ -534,9 +535,10 @@ public class GameState implements Serializable, Copyable<GameState> {
             player.reset();
         }
         battlefield.reset(game);
-        combat.reset();
+        combat.reset(game);
         this.reset();
         effects.apply(game);
+        combat.checkForRemoveFromCombat(game);
     }
 
     // Remove End of Combat effects
